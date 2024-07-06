@@ -1,13 +1,11 @@
-import { useState } from 'react'
-
+import Scene from './scene/Scene.jsx'
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
-      <h1>Project CAT</h1>
+      <Scene/>
     </>
   )
 }
 
-export default App
+export default App;
