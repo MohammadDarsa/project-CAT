@@ -3,7 +3,7 @@ import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { useLoader } from "@react-three/fiber";
 import { useAnimations } from "@react-three/drei";
 import * as THREE from "three";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Cat = () => {
 
@@ -23,30 +23,58 @@ const Cat = () => {
     const lieBellyEnd = animations.actions.Lie_belly_end;
     lieBellyEnd.setLoop(THREE.LoopOnce, 1);
     const idle1 = animations.actions.Idle_1;
+    idle1.setLoop(THREE.LoopOnce, 1);
+    const idle2 = animations.actions.Idle_2;
+    idle2.setLoop(THREE.LoopOnce, 1);
+    const idle3 = animations.actions.Idle_3;
+    idle3.setLoop(THREE.LoopOnce, 1);
+    const idle4 = animations.actions.Idle_4;
+    idle4.setLoop(THREE.LoopOnce, 1);
+    const idle5 = animations.actions.Idle_5;
+    idle5.setLoop(THREE.LoopOnce, 1);
+    const idle6 = animations.actions.Idle_6;
+    idle6.setLoop(THREE.LoopOnce, 1);
+    const idle7 = animations.actions.Idle_7;
+    idle7.setLoop(THREE.LoopOnce, 1);
+
+    let currentAnimation;
 
     mixer.addEventListener("finished", (e) => {
+        let animation = currentAnimation;
         switch(e.action.getClip().name)
         {
             case "Lie_belly_sleep":
-                lieBellySleep.stop();
-                lieBellySleepEnd.play();
+                currentAnimation = lieBellySleepEnd;
                 break;
             case "Lie_belly_sleep_end":
-                lieBellySleepEnd.stop();
-                lieBellyEnd.play();
+                currentAnimation = lieBellyEnd;
                 break;
             case "Lie_belly_end":
-                lieBellyEnd.stop();
-                idle1.play();
+                currentAnimation = idle1;
                 break;
             default:
-                idle1.play();
+                currentAnimation = getRandomIdle(0.85)
                 break;
         }
+        animation.stop();
+        currentAnimation.play();
     })
 
+    const getRandomIdle = (threshold) => {
+        let animation = animations.actions.Idle_1;
+        //calculate the next animation
+        const random0_1 = Math.random();
+
+        if(random0_1 >= threshold) {
+            const index = Math.floor(((random0_1 - threshold) / (1 - threshold)) * 6) + 1;
+            animation = animations.actions["Idle_" + index];
+        }
+        return animation;
+    }
+
     useEffect(() => {
-        lieBellySleep.play();
+        currentAnimation = lieBellySleep;
+        currentAnimation.play();
     }, []);
 
     return <>
